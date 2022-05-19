@@ -62,41 +62,56 @@ exports.deleteUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
   try {
-      const user = await User.findOne({
-        where: {
-          [Op.and]: [
-            { password: req.body.password },
-            { email: req.body.email },
-          ],
-        },
-      });
-      console.log(user);
-      if (user !== null) {
-        let token = jwt.sign(
-          { userId: user.id, userEmail: user.email },
-          process.env.SECRET,
-          { expiresIn: "1h" }
-        );
-        res.cookie('jwt',token,{httpOnly:true, maxAge:100000})
-        res.send({ status: "success", msg:"login successFull"});
-      } else {
-        res.send({ status: "failed", msg: "invaild email or password" });
-      }
-  
+    const user = await User.findOne({
+      where: {
+        [Op.and]: [{ password: req.body.password }, { email: req.body.email }],
+      },
+    });
+    console.log(user);
+    if (user !== null) {
+      let token = jwt.sign(
+        { userId: user.id, userEmail: user.email },
+        process.env.SECRET,
+        { expiresIn: "1h" }
+      );
+      let refreshToken = jwt.sign(
+        { userId: user.id, userEmail: user.email },
+        process.env.SECRET,
+        { expiresIn: "24h" }
+      );
+      res.send({ status: "success", token, refreshToken });
+    } else {
+      res.send({ status: "failed", msg: "invaild email or password" });
+    }
   } catch (err) {
-      console.log(err);
-      res.send({ status: "failed", error: err.errors });
+    console.log(err);
+    res.send({ status: "failed", error: err.errors });
   }
 };
 
-exports.logoutUser = async(req,res) =>{
-    try {
-          res.cookie.jwt=""
-        res.status(200).send('res');
+exports.logoutUser = async (req, res) => {
+  try {
+    res.status(200).send("logout");
+  } catch (err) {
+    console.log(err);
+    res.send({ status: "failed", error: err.errors });
+  }
+};
 
-    } catch (err) {
-       console.log(err); 
-       res.send({ status: "failed", error: err.errors });
-     }
-}
-function errMsg(obj) {}
+exports.refreshToken = async (req, res) => {
+  try {
+    const token = req.body.refreshToken;
+    if (!token) {
+      return res.status(403).send("A token is required for authentication");
+    }
+    decoded = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    let newToken = jwt.sign(
+      { userId: decoded.userId, userEmail: decoded.userEmail },
+      process.env.SECRET,
+      { expiresIn: "1h" }
+    );
+    res.send({ status: "success", newToken });
+  } catch (error) {
+    res.send({ status: "failed", error: err.errors });
+  }
+};

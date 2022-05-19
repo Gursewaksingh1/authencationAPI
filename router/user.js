@@ -9,5 +9,6 @@ router.post("/updateUser", isAuth, userController.updateUser);
 router.post("/deleteUser",isAuth, userController.deleteUser);
 router.post("/loginUser", userController.loginUser);
 router.post("/logoutUser", userController.logoutUser);
+router.post("/refreshToken", userController.refreshToken);
 
 module.exports = router
