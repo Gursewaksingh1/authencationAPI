@@ -37,7 +37,7 @@ exports.postUser = async (req, res) => {
     res.send({ status: "success", data: user });
   } catch (err) {
     console.log(err);
-    res.send(err.errors[0].message);
+    res.send(err.errors);
   }
 };
 
