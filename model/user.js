@@ -1,6 +1,6 @@
 const sequelize = require("sequelize");
 
-const db = require('../db');
+const db = require("../db");
 
 const user = db.define("User", {
   id: {
@@ -16,7 +16,7 @@ const user = db.define("User", {
   email: {
     type: sequelize.STRING,
     allowNull: false,
-    unique:true,
+    unique: true,
     validate: {
       isEmail: true,
     },
@@ -26,16 +26,20 @@ const user = db.define("User", {
     allowNull: false,
     validate: {
       len: [5, 20],
-    }
+    },
   },
-  address:{
-      type:sequelize.STRING,
-      allowNull:false,
-      validate:{
-          len: [8,50],
 
-      }
-  }
+  address: {
+    type: sequelize.STRING,
+    allowNull: false,
+    validate: {
+      len: [8, 50],
+    },
+  },
+  image: {
+    type: sequelize.STRING,
+    allowNull: false,
+  },
 });
 
 module.exports = user;
