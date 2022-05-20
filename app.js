@@ -29,7 +29,6 @@ const fileFilter=(req, file, cb) => {
     } else {
       cb(null, false);
       console.log("Only .png, .jpg and .jpeg format allowed!");
-    //   return cb(new Error("Only .png, .jpg and .jpeg format allowed!"));
     }
   }
 const PORT = process.env.PORT || 3000;

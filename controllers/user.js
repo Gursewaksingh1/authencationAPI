@@ -28,20 +28,19 @@ exports.getUserById = async (req, res) => {
 
 exports.postUser = async (req, res) => {
   try {
-    console.log(req.file);
-    // if (req.file !== undefined) {
-    //   const user = await User.create({
-    //     //creating new user
-    //     name: req.body.name,
-    //     email: req.body.email,
-    //     password: req.body.password,
-    //     address: req.body.address,
-    //     image: req.file.path.slice(7),
-    //   });
-    //   res.send({ status: "success", data: user });
-    // } else {
-    //   res.send({ status: "failed", error: "image field must not be empty or Only .png, .jpg and .jpeg format allowed!" });
-    // }
+    if (req.file !== undefined) {
+      const user = await User.create({
+        //creating new user
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        address: req.body.address,
+        image: req.file.path.slice(7),
+      });
+      res.send({ status: "success", data: user });
+    } else {
+      res.send({ status: "failed", error: "image field must not be empty or Only .png, .jpg and .jpeg format allowed!" });
+    }
   } catch (err) {
     console.log(err);
     res.send(err.errors);
