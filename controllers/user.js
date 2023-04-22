@@ -2,7 +2,6 @@ const User = require("../model/user");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 var fs = require("fs");
-let accessTokens = [];
 exports.getUsers = async (req, res) => {
   try {
     // fetching all users
